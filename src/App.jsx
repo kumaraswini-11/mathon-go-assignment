@@ -10,19 +10,23 @@ const App = () => {
     title: "Video title goes here",
     description: "This is the description of the video",
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchVideoDetails(videoId)
-      .then((details) => {
+    (async () => {
+      try {
+        const details = await fetchVideoDetails(videoId);
         setVideoDetails(details);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching video details:", error);
-      });
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, [videoId]);
 
   const handleVideoReady = (event) => {
-    setPlayer(event.target);
+    setPlayer(event?.target);
   };
 
   return (
@@ -33,14 +37,13 @@ const App = () => {
         </h1>
       </header>
 
-      {/* Youtube video, title, descption */}
       <VideoPlayer
         videoId={videoId}
         onVideoReady={handleVideoReady}
+        loading={loading}
         videoDetails={videoDetails}
       />
 
-      {/* Comment section richtext editor, ad, edit, delete option*/}
       {player && <Notes videoId={videoId} player={player} />}
     </main>
   );

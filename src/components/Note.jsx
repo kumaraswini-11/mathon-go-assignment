@@ -1,4 +1,3 @@
-// src/components/Note.js
 import React, { useState } from "react";
 
 const Note = ({ note, onDelete, onEdit, player }) => {
@@ -24,23 +23,42 @@ const Note = ({ note, onDelete, onEdit, player }) => {
             [{new Date(note.timestamp * 1000).toISOString().substr(11, 8)}]
           </span>
         </p>
-        <p className="border rounded-b-md mt-2 p-2 w-full shadow-sm">
-          {note.content}
-        </p>
+        {isEditing ? (
+          <textarea
+            className="border rounded-b-md mt-2 p-2 w-full shadow-sm"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
+        ) : (
+          <p className="border rounded-b-md mt-2 p-2 w-full shadow-sm">
+            {note.content}
+          </p>
+        )}
       </div>
       <div className="flex gap-2 mt-2 items-center justify-end">
-        <button
-          className="rounded-md border font-medium bg-white text-secondaryText py-0.5 px-1 shadow-sm"
-          onClick={() => onDelete(note.id)}
-        >
-          Delete note
-        </button>
-        <button
-          className=" text-secondaryText font-medium rounded-md border bg-white py-0.5 px-1 shadow-sm"
-          onClick={() => setIsEditing(!isEditing)}
-        >
-          Edit note
-        </button>
+        {isEditing ? (
+          <button
+            className="rounded-md border font-medium bg-white text-secondaryText py-0.5 px-1 shadow-sm"
+            onClick={handleEdit}
+          >
+            Save
+          </button>
+        ) : (
+          <>
+            <button
+              className="rounded-md border font-medium bg-white text-secondaryText py-0.5 px-1 shadow-sm"
+              onClick={() => setIsEditing(!isEditing)}
+            >
+              Edit
+            </button>
+            <button
+              className="rounded-md border font-medium bg-white text-secondaryText py-0.5 px-1 shadow-sm"
+              onClick={() => onDelete(note.id)}
+            >
+              Delete
+            </button>
+          </>
+        )}
       </div>
       <hr className="my-2" />
     </>

@@ -1,4 +1,3 @@
-// src/components/Notes.js
 import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -16,15 +15,13 @@ const Notes = ({ videoId, player }) => {
 
   const handleAddNote = () => {
     const currentTime = player.getCurrentTime();
-    const newNotes = [
-      ...notes,
-      {
-        id: Date.now(),
-        content: newNote,
-        timestamp: currentTime,
-        date: new Date().toLocaleString(),
-      },
-    ];
+    const newNoteItem = {
+      id: Date.now(),
+      content: newNote,
+      timestamp: currentTime,
+      date: new Date().toLocaleString(),
+    };
+    const newNotes = [...notes, newNoteItem];
     setNotes(newNotes);
     localStorage.setItem(videoId, JSON.stringify(newNotes));
     setNewNote("");
@@ -49,14 +46,11 @@ const Notes = ({ videoId, player }) => {
       <div className="flex justify-between items-center">
         <div>
           <label className="block text-lg font-semibold">My notes</label>
-          <p className="text-secondaryText font-normal text-sm">
-            <ReactQuill
-              value={newNote}
-              onChange={setNewNote}
-              placeholder="All your notes at a single place. Click on any note to go to a specific
-        timestamp in the video."
-            />
-          </p>
+          <ReactQuill
+            value={newNote}
+            onChange={setNewNote}
+            placeholder="All your notes at a single place. Click on any note to go to a specific timestamp in the video."
+          />
         </div>
         <button
           className="flex items-center gap-2 rounded-md border bg-white p-2 shadow-sm"
@@ -70,7 +64,7 @@ const Notes = ({ videoId, player }) => {
       </div>
       <hr className="mt-4 mb-6" />
 
-      {notes.map((note) => (
+      {notes?.map((note) => (
         <Note
           key={note.id}
           note={note}
