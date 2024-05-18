@@ -17,7 +17,7 @@ export const formatTimestamp = (timestamp) => {
 
   // Format the minutes and seconds
   const formattedMinutes = String(minutes).padStart(2, "0");
-  const formattedSeconds = String(seconds).padStart(2, "0"); // Ensure two digits for seconds
+  const formattedSeconds = String(seconds).padStart(2, "0");
 
   // Concatenate minutes and seconds with "min" and "sec"
   const formattedTime = `${formattedMinutes} min ${formattedSeconds} sec`;

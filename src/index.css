@@ -2,18 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-button {
-  cursor: pointer;
-}
-
 .quill-editor .ql-container {
+  border-bottom-left-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+  background: #fefcfc;
+
   font-size: 0.875rem;
   line-height: 1.25rem;
-  /* border: none; */
   color: var(--secondaryText);
+  min-height: 4em;
 }
 
-/* 
-* {
+.ql-snow.ql-toolbar {
+  display: block;
+  background: #eaecec;
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+}
+
+/* * {
   border: 1px solid red;
 } */

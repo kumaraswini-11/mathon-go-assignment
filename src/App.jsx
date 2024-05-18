@@ -37,11 +37,20 @@ const App = () => {
   };
 
   return (
-    <main className="max-w-screen text-primaryText font-inter p-6">
-      <header>
+    <main className="max-w-screen mx-auto text-primaryText font-inter p-6">
+      <header className="flex gap-6 items-center justify-between">
         <h1 className="font-semibold font-times text-xl">
           Video Player with Notes
         </h1>
+
+        <input
+          type="text"
+          id="youtubeVideoId"
+          placeholder="Enter YouTube video ID"
+          value={videoId}
+          onChange={(event) => setVideoId(event.target.value)}
+          className="w-60 rounded-md border border-gray-300 p-2"
+        />
       </header>
 
       <VideoPlayer

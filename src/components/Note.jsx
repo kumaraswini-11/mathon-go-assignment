@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ReactQuillTextEditor from "./ReactQuillTextEditor"; // Import the editor
+import { ReactQuillTextEditor } from "./";
 import { formatDate, formatTimestamp } from "../utils/dateAndTimeFormatter";
 
 const Note = ({ note, onDelete, onEdit, player }) => {
@@ -31,15 +31,18 @@ const Note = ({ note, onDelete, onEdit, player }) => {
         {isEditing ? (
           <ReactQuillTextEditor newNote={content} setNewNote={setContent} />
         ) : (
-          <p className="border rounded-b-md mt-2 p-2 w-full shadow-sm">
-            {note.content}
+          <p
+            className="border rounded-b-md mt-2 p-2 w-full shadow-sm"
+            dangerouslySetInnerHTML={{ __html: content }}
+          >
+            {/* {parse(content)} */}
           </p>
         )}
       </div>
       <div className="flex gap-2 mt-2 items-center justify-end">
         {isEditing ? (
           <button
-            className="rounded-md border font-medium bg-white text-secondaryText py-0.5 px-1 shadow-sm"
+            className="rounded-md border font-medium text-base bg-white text-secondaryText py-0.5 px-1 shadow-sm cursor-pointer"
             onClick={handleEdit}
           >
             Save
@@ -47,13 +50,13 @@ const Note = ({ note, onDelete, onEdit, player }) => {
         ) : (
           <>
             <button
-              className="text-secondaryText font-medium rounded-md border bg-white py-0.5 px-1 shadow-sm"
+              className="text-secondaryText font-medium text-base rounded-md border bg-white py-0.5 px-1 shadow-sm cursor-pointer"
               onClick={() => setIsEditing(!isEditing)}
             >
               Edit note
             </button>
             <button
-              className="rounded-md border font-medium bg-white text-secondaryText py-0.5 px-1 shadow-sm"
+              className="rounded-md border font-medium text-base bg-white text-secondaryText py-0.5 px-1 shadow-sm cursor-pointer"
               onClick={() => onDelete(note.id)}
             >
               Delete note

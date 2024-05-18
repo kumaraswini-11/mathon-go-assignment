@@ -49,20 +49,18 @@ const Notes = ({ videoId, player }) => {
 
   return (
     <section className="mt-6 border p-4 rounded-xl">
-      <div className="flex justify-between gap-5 items-center">
+      <div className="flex justify-between gap-6 items-center">
         <div className="flex-1 rounded">
           <label className="block text-lg font-semibold">My notes</label>
           <ReactQuillTextEditor newNote={newNote} setNewNote={setNewNote} />
         </div>
         <button
-          className="flex items-center gap-2 rounded-md border bg-white p-2 shadow-sm cursor-pointer"
+          className="flex items-center justify-center font-semibold gap-2 rounded-md border bg-white p-2 shadow-sm cursor-pointer"
           onClick={handleAddNote}
           disabled={!newNote.trim()}
         >
           <CiCirclePlus className="text-xl text-[#667085]" />
-          <span className="text-sm text-[#344054] font-semibold">
-            Add new note
-          </span>
+          <span className="text-base text-[#344054]">Add new note</span>
         </button>
       </div>
       <hr className="mt-4 mb-6" />

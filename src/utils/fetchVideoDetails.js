@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const fetchVideoDetails = async (videoId) => {
   try {
-    const apiKey = "AIzaSyB47RISrDvfNVN2DoqvG1iIXjnrwb1ezm8";
+    const apiKey = import.meta.env.VITE_API_KEY;
     const response = await axios.get(
       `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${apiKey}&part=snippet`
     );
