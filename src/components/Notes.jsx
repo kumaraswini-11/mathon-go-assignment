@@ -1,36 +1,42 @@
-import React, { useState, useEffect } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import React, { useState, useEffect, useCallback } from "react";
 import { CiCirclePlus } from "react-icons/ci";
-import Note from "./Note";
+import { Note, ReactQuillTextEditor } from "./";
 
 const Notes = ({ videoId, player }) => {
   const [notes, setNotes] = useState([]);
   const [newNote, setNewNote] = useState("");
 
-  useEffect(() => {
+  const loadNotes = useCallback(() => {
     const savedNotes = JSON.parse(localStorage.getItem(videoId)) || [];
     setNotes(savedNotes);
   }, [videoId]);
 
+  useEffect(() => {
+    loadNotes();
+  }, [loadNotes]);
+
+  const updateLocalStorage = (updatedNotes) => {
+    localStorage.setItem(videoId, JSON.stringify(updatedNotes));
+  };
+
   const handleAddNote = () => {
-    const currentTime = player.getCurrentTime();
+    const currentTime = player?.getCurrentTime() || 0;
     const newNoteItem = {
       id: Date.now(),
       content: newNote,
       timestamp: currentTime,
       date: new Date().toLocaleString(),
     };
-    const newNotes = [...notes, newNoteItem];
-    setNotes(newNotes);
-    localStorage.setItem(videoId, JSON.stringify(newNotes));
+    const updatedNotes = [...notes, newNoteItem];
+    setNotes(updatedNotes);
+    updateLocalStorage(updatedNotes);
     setNewNote("");
   };
 
   const handleDeleteNote = (id) => {
     const updatedNotes = notes.filter((note) => note.id !== id);
     setNotes(updatedNotes);
-    localStorage.setItem(videoId, JSON.stringify(updatedNotes));
+    updateLocalStorage(updatedNotes);
   };
 
   const handleEditNote = (id, content) => {
@@ -38,23 +44,20 @@ const Notes = ({ videoId, player }) => {
       note.id === id ? { ...note, content } : note
     );
     setNotes(updatedNotes);
-    localStorage.setItem(videoId, JSON.stringify(updatedNotes));
+    updateLocalStorage(updatedNotes);
   };
 
   return (
     <section className="mt-6 border p-4 rounded-xl">
-      <div className="flex justify-between items-center">
-        <div>
+      <div className="flex justify-between gap-5 items-center">
+        <div className="flex-1 rounded">
           <label className="block text-lg font-semibold">My notes</label>
-          <ReactQuill
-            value={newNote}
-            onChange={setNewNote}
-            placeholder="All your notes at a single place. Click on any note to go to a specific timestamp in the video."
-          />
+          <ReactQuillTextEditor newNote={newNote} setNewNote={setNewNote} />
         </div>
         <button
-          className="flex items-center gap-2 rounded-md border bg-white p-2 shadow-sm"
+          className="flex items-center gap-2 rounded-md border bg-white p-2 shadow-sm cursor-pointer"
           onClick={handleAddNote}
+          disabled={!newNote.trim()}
         >
           <CiCirclePlus className="text-xl text-[#667085]" />
           <span className="text-sm text-[#344054] font-semibold">
@@ -64,7 +67,7 @@ const Notes = ({ videoId, player }) => {
       </div>
       <hr className="mt-4 mb-6" />
 
-      {notes?.map((note) => (
+      {notes.map((note) => (
         <Note
           key={note.id}
           note={note}

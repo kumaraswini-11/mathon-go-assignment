@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import ReactQuillTextEditor from "./ReactQuillTextEditor"; // Import the editor
+import { formatDate, formatTimestamp } from "../utils/dateAndTimeFormatter";
 
 const Note = ({ note, onDelete, onEdit, player }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -16,19 +18,18 @@ const Note = ({ note, onDelete, onEdit, player }) => {
   return (
     <>
       <div className="flex flex-col text-sm text-[#344054] items-start justify-center">
-        <p className="font-medium">{note.date}</p>
+        <p className="font-medium">{formatDate(note.date)}</p>
         <p className="font-normal">
           Timestamp:{" "}
-          <span className="font-medium text-[#6941C6]" onClick={handleTimeJump}>
-            [{new Date(note.timestamp * 1000).toISOString().substr(11, 8)}]
+          <span
+            className="font-medium text-[#6941C6] hover:opacity-75 cursor-pointer"
+            onClick={handleTimeJump}
+          >
+            {formatTimestamp(note.timestamp)}
           </span>
         </p>
         {isEditing ? (
-          <textarea
-            className="border rounded-b-md mt-2 p-2 w-full shadow-sm"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
+          <ReactQuillTextEditor newNote={content} setNewNote={setContent} />
         ) : (
           <p className="border rounded-b-md mt-2 p-2 w-full shadow-sm">
             {note.content}
@@ -46,16 +47,16 @@ const Note = ({ note, onDelete, onEdit, player }) => {
         ) : (
           <>
             <button
-              className="rounded-md border font-medium bg-white text-secondaryText py-0.5 px-1 shadow-sm"
+              className="text-secondaryText font-medium rounded-md border bg-white py-0.5 px-1 shadow-sm"
               onClick={() => setIsEditing(!isEditing)}
             >
-              Edit
+              Edit note
             </button>
             <button
               className="rounded-md border font-medium bg-white text-secondaryText py-0.5 px-1 shadow-sm"
               onClick={() => onDelete(note.id)}
             >
-              Delete
+              Delete note
             </button>
           </>
         )}

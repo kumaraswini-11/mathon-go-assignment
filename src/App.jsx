@@ -1,32 +1,39 @@
 import React, { useState, useEffect } from "react";
-import VideoPlayer from "./components/VideoPlayer";
-import Notes from "./components/Notes";
+import { Notes, VideoPlayer } from "./components";
 import { fetchVideoDetails } from "./utils/fetchVideoDetails";
 
 const App = () => {
   const [videoId, setVideoId] = useState("M7lc1UVf-VE");
   const [player, setPlayer] = useState(null);
   const [videoDetails, setVideoDetails] = useState({
-    title: "Video title goes here",
-    description: "This is the description of the video",
+    title: "",
+    description: "",
   });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    (async () => {
+    const fetchDetails = async () => {
       try {
         const details = await fetchVideoDetails(videoId);
         setVideoDetails(details);
       } catch (error) {
-        console.error("Error fetching video details:", error);
+        console.error("Error fetching video details:", error.message);
       } finally {
         setLoading(false);
       }
-    })();
+    };
+
+    fetchDetails();
   }, [videoId]);
 
-  const handleVideoReady = (event) => {
-    setPlayer(event?.target);
+  const handlePlayerReady = (event) => {
+    // "player" state variable - Save a reference to the player when it's ready
+    // When we say "save a reference to the player," we mean storing a pointer or a handle that allows us to access and manipulate the player instance later in our code.
+    setPlayer(event.target);
+
+    // Get the initial playback time when the player is ready
+    // player.getCurrentTime().then((time) => console.log(event.timeStamp));
+    // console.log(event.timeStamp);
   };
 
   return (
@@ -39,7 +46,7 @@ const App = () => {
 
       <VideoPlayer
         videoId={videoId}
-        onVideoReady={handleVideoReady}
+        onReady={handlePlayerReady}
         loading={loading}
         videoDetails={videoDetails}
       />

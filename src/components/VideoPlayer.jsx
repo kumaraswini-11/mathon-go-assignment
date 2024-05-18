@@ -1,15 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import YouTube from "react-youtube";
 
-const VideoPlayer = ({ videoId, onVideoReady, loading, videoDetails }) => {
-  const [playerReady, setPlayerReady] = useState(false);
-
-  useEffect(() => {
-    if (playerReady) {
-      onVideoReady();
-    }
-  }, [playerReady, onVideoReady]);
-
+const VideoPlayer = ({ videoId, onReady, loading, videoDetails }) => {
   const opts = {
     height: "420",
     width: "100%",
@@ -18,29 +10,27 @@ const VideoPlayer = ({ videoId, onVideoReady, loading, videoDetails }) => {
     },
   };
 
-  return (
+  return loading ? (
+    <div className="flex flex-col gap-2 mt-4">
+      <div className="bg-gray-300 animate-pulse h-[420px] rounded w-full"></div>
+      <div className="bg-gray-300 animate-pulse rounded h-4 w-3/4"></div>
+      <div className="bg-gray-300 animate-pulse h-4 rounded w-full"></div>
+    </div>
+  ) : (
     <section className="w-full mt-4">
       <div className="rounded-lg overflow-hidden">
         <YouTube
           videoId={videoId}
           opts={opts}
-          onReady={() => setPlayerReady(true)}
+          onReady={(event) => onReady(event)}
         />
       </div>
       <div className="mt-4">
         <h2 className="font-semibold font-times text-lg">
-          {loading ? (
-            <span className="bg-gray-300 animate-pulse rounded h-4 w-3/4 block"></span>
-          ) : (
-            videoDetails?.title
-          )}
+          {videoDetails?.title}
         </h2>
-        <p className="text-secondaryText font-normal text-sm">
-          {loading ? (
-            <span className="bg-gray-300 animate-pulse h-3 rounded w-full block mt-1"></span>
-          ) : (
-            videoDetails?.description
-          )}
+        <p className="text-secondaryText font-normal text-sm mt-1">
+          {videoDetails?.description}
         </p>
       </div>
       <hr className="mt-3" />
